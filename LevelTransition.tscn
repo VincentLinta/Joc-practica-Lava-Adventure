@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://c7b5yw2ll06qq"]
+
+[ext_resource type="Script" uid="uid://db41qbr0pq2k8" path="res://LevelTransition.gd" id="1_j8p0x"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=1309333707]
+script = ExtResource("1_j8p0x")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=627535226]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="." unique_id=1329424841]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.98039216, 0.84313726, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5882353)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 80
+text = "LEVEL 5 COMPLETE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="." unique_id=1562832127]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -211.0
+offset_top = 121.0
+offset_right = 209.0
+offset_bottom = 214.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(210, 46.5)
+theme_override_colors/font_color = Color(0.8627451, 0.8627451, 0.8627451, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.50980395)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 32
+text = "Loading Level 6...
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScoreLabel" type="RichTextLabel" parent="." unique_id=876775253]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -254.0
+offset_top = 35.0
+offset_right = 237.5
+offset_bottom = 135.5
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+scroll_active = false
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1

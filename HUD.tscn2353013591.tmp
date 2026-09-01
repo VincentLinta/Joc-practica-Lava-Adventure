@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://c2ka075u3lcds"]
+
+[ext_resource type="Script" uid="uid://cpfv6qhhwl8q3" path="res://HUD.gd" id="1_k5de2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k5de2"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.5882353)
+border_color = Color(0.8, 0.8, 0.8, 0.5882353)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vow1y"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_efote"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=999949728]
+script = ExtResource("1_k5de2")
+
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=1825901659]
+custom_minimum_size = Vector2(200, 22)
+offset_left = 476.0
+offset_top = 20.0
+offset_right = 676.0
+offset_bottom = 42.0
+value = 100.0
+show_percentage = false
+
+[node name="HPLabel" type="Label" parent="HealthBar" unique_id=603166386]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 26
+text = "HP 200"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimerLabel" type="Label" parent="." unique_id=1071321628]
+offset_left = 30.0
+offset_top = 20.0
+offset_right = 70.0
+offset_bottom = 43.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_k5de2")
+
+[node name="ScoreLabel" type="Label" parent="." unique_id=423098886]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -88.0
+offset_top = 20.0
+offset_bottom = 51.0
+grow_horizontal = 0
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_vow1y")
+text = "SCORE 0"
+horizontal_alignment = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1412913817]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LevelLabel" type="RichTextLabel" parent="PanelContainer" unique_id=767934928]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_efote")
+horizontal_alignment = 1

@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dday5h36qujmp"]
+
+[ext_resource type="Texture2D" uid="uid://bcquicjsh4kxs" path="res://assets/level_end/scut.png" id="1_1eqwt"]
+[ext_resource type="Script" uid="uid://bw5gh42gvw4vm" path="res://ShieldProjectile.gd" id="1_13ijo"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_13ijo"]
+
+[node name="ShieldProjectile" type="Area2D" unique_id=207958]
+script = ExtResource("1_13ijo")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=456156277]
+texture = ExtResource("1_1eqwt")
+hframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=630122285]
+position = Vector2(-1, 0)
+shape = SubResource("CircleShape2D_13ijo")

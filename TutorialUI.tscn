@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://o1nbliu7vxko"]
+
+[ext_resource type="Script" uid="uid://cqb5guyacme5d" path="res://TutorialUI.gd" id="1_tsbw0"]
+
+[node name="TutorialUI" type="CanvasLayer" unique_id=777075252]
+script = ExtResource("1_tsbw0")
+
+[node name="Panel" type="Panel" parent="." unique_id=1219157870]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -125.0
+offset_right = 500.0
+offset_bottom = 125.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(500, 125)
+tooltip_text = "
+"
+
+[node name="Label" type="Label" parent="Panel" unique_id=897668675]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = -1.0
+offset_right = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2

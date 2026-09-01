@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://dke7om43cm7lq"]
+
+[ext_resource type="Texture2D" uid="uid://dga52l0sijdrt" path="res://assets/turret_guardian/lava_walker_projectile.png" id="1_a2o1d"]
+[ext_resource type="Script" uid="uid://b38eurshtmtvg" path="res://Fire_orb.gd" id="1_ucjw1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ucjw1"]
+atlas = ExtResource("1_a2o1d")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oeqrh"]
+atlas = ExtResource("1_a2o1d")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ecqpb"]
+atlas = ExtResource("1_a2o1d")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_riwn0"]
+atlas = ExtResource("1_a2o1d")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6pxgh"]
+atlas = ExtResource("1_a2o1d")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oivqp"]
+atlas = ExtResource("1_a2o1d")
+region = Rect2(240, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xrv7a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ucjw1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oeqrh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ecqpb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_riwn0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6pxgh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oivqp")
+}],
+"loop": true,
+"name": &"spin",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_326m7"]
+radius = 18.0
+
+[node name="FireOrb" type="Area2D" unique_id=1329360845]
+script = ExtResource("1_ucjw1")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=633213591]
+sprite_frames = SubResource("SpriteFrames_xrv7a")
+animation = &"spin"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1910770855]
+position = Vector2(0, 2)
+shape = SubResource("CircleShape2D_326m7")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

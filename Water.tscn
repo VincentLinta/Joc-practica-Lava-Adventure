@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cpvxjrk2o6ii1"]
+
+[ext_resource type="Script" uid="uid://bjrr325w2676a" path="res://Water.gd" id="1_4nnwq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hinnp"]
+size = Vector2(144, 15.5)
+
+[node name="Water" type="Area2D" unique_id=319954756]
+collision_layer = 0
+script = ExtResource("1_4nnwq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2014033696]
+shape = SubResource("RectangleShape2D_hinnp")

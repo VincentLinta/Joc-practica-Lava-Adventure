@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bn64i7kx1eaxx"]
+
+[ext_resource type="Script" uid="uid://mbxn7cc1bfrb" path="res://music_manager.gd" id="2_bhb8d"]
+[ext_resource type="AudioStream" uid="uid://66hthsmqqha2" path="res://deuslower-dark-fantasy-ambient-dungeon-synthpiano-verse-248214.mp3" id="2_rjr7q"]
+
+[node name="MusicManager" type="AudioStreamPlayer" unique_id=1090626581]
+process_mode = 3
+autoplay = true
+bus = &"Music"
+script = ExtResource("2_bhb8d")
+
+[node name="PausePlayer" type="AudioStreamPlayer" parent="." unique_id=1495466104]
+process_mode = 3
+stream = ExtResource("2_rjr7q")
+bus = &"Music"

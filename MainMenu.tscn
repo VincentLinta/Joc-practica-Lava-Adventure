@@ -1,0 +1,207 @@
+[gd_scene format=3 uid="uid://18p6updrh5pl"]
+
+[ext_resource type="Script" uid="uid://iakhklhb5ayb" path="res://MainMenu.gd" id="1_i26rj"]
+[ext_resource type="PackedScene" uid="uid://bbpbo5bc2f4er" path="res://AudioMenu.tscn" id="2_eiy7p"]
+
+[node name="MainMenu" type="Control" unique_id=209162194]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_i26rj")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1489313457]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.16862746, 0.09803922, 0.61960787, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=927697315]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1476845416]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=814907212]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "LAVA ADVENTURE"
+horizontal_alignment = 1
+
+[node name="StartButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=191687483]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+text = "START GAME"
+
+[node name="RestartButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=297548291]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+text = "RESTART
+"
+
+[node name="SelectLevelButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1952752137]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+text = "Select Level"
+
+[node name="OptionsButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=92661587]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+text = "OPTIONS"
+
+[node name="ExitButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1535940321]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+text = "EXIT
+"
+
+[node name="OptionsContainer" type="CenterContainer" parent="." unique_id=1893381530]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="OptionsContainer" unique_id=830421152]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OptionsContainer/PanelContainer" unique_id=361294540]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="OptionsLabel" type="Label" parent="OptionsContainer/PanelContainer/VBoxContainer" unique_id=83482813]
+custom_minimum_size = Vector2(300, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "DISPLAY OPTIONS"
+horizontal_alignment = 1
+
+[node name="ResolutionLabel" type="Label" parent="OptionsContainer/PanelContainer/VBoxContainer" unique_id=1943620989]
+layout_mode = 2
+text = "RESOLUTION"
+
+[node name="ResolutionOption" type="OptionButton" parent="OptionsContainer/PanelContainer/VBoxContainer" unique_id=268779398]
+layout_mode = 2
+
+[node name="ApplyResolutionButton" type="Button" parent="OptionsContainer/PanelContainer/VBoxContainer" unique_id=605413059]
+layout_mode = 2
+text = "APPLY RESOLUTION"
+
+[node name="FullscreenButton" type="Button" parent="OptionsContainer/PanelContainer/VBoxContainer" unique_id=914196407]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+text = "FULLSCREEN"
+
+[node name="BorderlessButton" type="Button" parent="OptionsContainer/PanelContainer/VBoxContainer" unique_id=606525895]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+text = "BORDERLESS"
+
+[node name="WindowedButton" type="Button" parent="OptionsContainer/PanelContainer/VBoxContainer" unique_id=1966300430]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+text = "WINDOWED"
+
+[node name="AudioButton" type="Button" parent="OptionsContainer/PanelContainer/VBoxContainer" unique_id=120074448]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+text = "AUDIO SETTINGS"
+
+[node name="BackButton" type="Button" parent="OptionsContainer/PanelContainer/VBoxContainer" unique_id=22242899]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+text = "BACK"
+
+[node name="LevelSelectContainer" type="CenterContainer" parent="." unique_id=1100235370]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LevelSelectContainer" unique_id=505236682]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Level1" type="Button" parent="LevelSelectContainer/VBoxContainer" unique_id=669687884]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Level 1"
+
+[node name="Level2" type="Button" parent="LevelSelectContainer/VBoxContainer" unique_id=650486151]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Level 2"
+
+[node name="Level3" type="Button" parent="LevelSelectContainer/VBoxContainer" unique_id=655516852]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Level 3"
+
+[node name="Level4" type="Button" parent="LevelSelectContainer/VBoxContainer" unique_id=53177254]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Level 4"
+
+[node name="Level5" type="Button" parent="LevelSelectContainer/VBoxContainer" unique_id=345242989]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Level 5"
+
+[node name="Level6" type="Button" parent="LevelSelectContainer/VBoxContainer" unique_id=906282057]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Level 6"
+
+[node name="Level7" type="Button" parent="LevelSelectContainer/VBoxContainer" unique_id=207957149]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Level 7"
+
+[node name="Level8" type="Button" parent="LevelSelectContainer/VBoxContainer" unique_id=1897225716]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Level 8"
+
+[node name="Level9" type="Button" parent="LevelSelectContainer/VBoxContainer" unique_id=2007700173]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Level 9"
+
+[node name="Level10" type="Button" parent="LevelSelectContainer/VBoxContainer" unique_id=895093907]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Level 10"
+
+[node name="Back" type="Button" parent="LevelSelectContainer/VBoxContainer" unique_id=184555126]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Back"
+
+[node name="AudioMenu" parent="." unique_id=978894134 instance=ExtResource("2_eiy7p")]
+visible = false
+layout_mode = 1
+
+[node name="VBoxContainer" parent="AudioMenu" index="0" unique_id=720085153]
+offset_top = -129.0
+offset_bottom = 129.0
+
+[connection signal="pressed" from="OptionsContainer/PanelContainer/VBoxContainer/ApplyResolutionButton" to="." method="_on_apply_resolution_button_pressed"]
+
+[editable path="AudioMenu"]

@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://ce7k5jggbk4qo"]
+
+[ext_resource type="Script" uid="uid://bygxg86wbrm6v" path="res://sfx_manager.gd" id="1_onrww"]
+
+[node name="SFXManager" type="Node" unique_id=571229137]
+script = ExtResource("1_onrww")
+
+[node name="SFXPlayer" type="AudioStreamPlayer" parent="." unique_id=2119240056]
+max_polyphony = 10
+bus = &"SFX"

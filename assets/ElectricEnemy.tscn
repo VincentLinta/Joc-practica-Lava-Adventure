@@ -1,0 +1,118 @@
+[gd_scene format=3 uid="uid://bt232sv035boa"]
+
+[ext_resource type="Script" uid="uid://dxfue4fvolyka" path="res://assets/ElectricEnemy.gd" id="1_aesvl"]
+[ext_resource type="Texture2D" uid="uid://7ajjm5jwv7pn" path="res://assets/enemies/Om_verde_da_foc.png" id="2_5wm5f"]
+[ext_resource type="Texture2D" uid="uid://c83r05bf1fgo8" path="res://assets/enemies/Om_verde_curenteaza_idle.png" id="2_pkqm8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ph5sa"]
+atlas = ExtResource("2_5wm5f")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bl8s0"]
+atlas = ExtResource("2_5wm5f")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kbi73"]
+atlas = ExtResource("2_5wm5f")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2hbjl"]
+atlas = ExtResource("2_5wm5f")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5wm5f"]
+atlas = ExtResource("2_pkqm8")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tg3fg"]
+atlas = ExtResource("2_pkqm8")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fawlh"]
+atlas = ExtResource("2_pkqm8")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_su6j6"]
+atlas = ExtResource("2_pkqm8")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tovse"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ph5sa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bl8s0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kbi73")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2hbjl")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5wm5f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tg3fg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fawlh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_su6j6")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 6.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4dy15"]
+size = Vector2(20, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2fdgs"]
+size = Vector2(20, 33)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lncav"]
+size = Vector2(69, 66.5)
+
+[node name="ElectricEnemy" type="CharacterBody2D" unique_id=1436414805]
+script = ExtResource("1_aesvl")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1642658792]
+sprite_frames = SubResource("SpriteFrames_tovse")
+animation = &"attack"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1838989476]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_4dy15")
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=370915569]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=2129019114]
+shape = SubResource("RectangleShape2D_2fdgs")
+
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=524871340]
+offset_left = -22.0
+offset_top = -50.0
+offset_right = 22.0
+offset_bottom = -44.0
+max_value = 60.0
+value = 60.0
+show_percentage = false
+
+[node name="AttackArea" type="Area2D" parent="." unique_id=1116805919]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=214591416]
+position = Vector2(-2.5, 1.25)
+shape = SubResource("RectangleShape2D_lncav")
+
+[node name="DamageTimer" type="Timer" parent="." unique_id=1446409777]
+wait_time = 2.0
