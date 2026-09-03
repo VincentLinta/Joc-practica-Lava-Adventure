@@ -28,6 +28,10 @@ SaveManager="*uid://0r0a458vy4d7"
 
 project/assembly_name="tryout"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gut/plugin.cfg")
+
 [input]
 
 move_left={

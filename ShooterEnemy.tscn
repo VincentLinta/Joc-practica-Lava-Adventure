@@ -260,7 +260,7 @@ sprite_frames = SubResource("SpriteFrames_fxagi")
 animation = &"idle"
 
 [node name="Muzzle" type="Marker2D" parent="." unique_id=449815250]
-position = Vector2(55, 12)
+position = Vector2(50, 12)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1231829798]
 position = Vector2(-1, -5.25)

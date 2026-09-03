@@ -1,5 +1,6 @@
 extends Area2D
 
+
 @export var speed: float = 520.0
 @export var return_speed: float = 650.0
 @export var damage: int = 100
@@ -89,7 +90,6 @@ func hit_target() -> void:
 		target.call("take_damage", final_damage)
 
 		if is_oneshot:
-			# Ajustat la 2.0 dB (sweet spot)
 			_play_audio("res://sfx/Shield_hitONESHOT.mp3", 1.0)
 		else:
 			_play_audio("res://sfx/Shield_hit.mp3", 3.0)
@@ -169,17 +169,76 @@ func get_camera_world_rect(camera: Camera2D) -> Rect2:
 	).grow(24.0)
 
 
-func _play_audio(path: String, volume_db: float = 0.0, start_offset: float = 0.0) -> void:
-	if not FileAccess.file_exists(path):
+func _play_audio(
+	path: String,
+	volume_db: float = 0.0,
+	start_offset: float = 0.0
+) -> void:
+	var exists := ResourceLoader.exists(path)
+
+	_log_audio(
+		"[SHIELD] path=%s exists=%s" % [
+			path,
+			exists
+		]
+	)
+
+	if not exists:
 		print("EROARE: SUNETUL NU EXISTA: ", path)
+
+		_log_audio(
+			"[SHIELD] ABORT (ResourceLoader.exists=false): %s" % path
+		)
+
 		return
 
 	var stream = load(path)
-	if stream:
-		var asp := AudioStreamPlayer.new()
-		asp.stream = stream
-		asp.volume_db = volume_db
-		asp.bus = "Master"
-		get_tree().root.add_child(asp)
-		asp.play(start_offset)
-		asp.finished.connect(asp.queue_free)
+
+	if stream == null:
+		_log_audio(
+			"[SHIELD] ABORT (load() null): %s" % path
+		)
+
+		return
+
+	var asp := AudioStreamPlayer.new()
+
+	asp.stream = stream
+	asp.volume_db = volume_db
+	asp.bus = "SFX"
+
+	get_tree().root.add_child(asp)
+
+	asp.play(start_offset)
+
+	asp.finished.connect(
+		asp.queue_free
+	)
+
+	_log_audio(
+		"[SHIELD] OK path=%s playing=%s bus=%s vol=%s" % [
+			path,
+			asp.playing,
+			asp.bus,
+			asp.volume_db
+		]
+	)
+
+
+func _log_audio(line: String) -> void:
+	var f := FileAccess.open(
+		"user://audio_debug.log",
+		FileAccess.READ_WRITE
+		if FileAccess.file_exists("user://audio_debug.log")
+		else FileAccess.WRITE
+	)
+
+	if f:
+		f.seek_end()
+		f.store_line(
+			"[%s] %s" % [
+				Time.get_ticks_msec(),
+				line
+			]
+		)
+		f.close()

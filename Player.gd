@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+
 const SHIELD_PROJECTILE_SCENE: PackedScene = preload(
 	"res://ShieldProjectile.tscn"
 )
@@ -21,6 +22,24 @@ var final_boss_damage_multiplier: float = 1.0
 var is_attacking: bool = false
 var is_dead: bool = false
 var facing_direction: int = 1
+
+# =============================================================
+# KNOCKBACK / STUN
+# Folosit în special de Final Boss.
+# În celelalte nivele nu are niciun efect dacă nu este apelat.
+# =============================================================
+
+var knockback_velocity: Vector2 = Vector2.ZERO
+var knockback_timer: float = 0.0
+
+@export var knockback_duration: float = 0.35
+@export var knockback_friction: float = 1200.0
+
+# =============================================================
+# DEATH SEQUENCE
+# =============================================================
+
+var death_sequence_id: int = 0
 
 # Starea scutului.
 var has_shield: bool = false
@@ -82,12 +101,11 @@ func _ready() -> void:
 	attack_shape.disabled = false
 	attack_area.monitoring = true
 
-	if get_parent():
-		health_bar = get_tree().root.find_child(
-			"HealthBar",
-			true,
-			false
-		) as ProgressBar
+	health_bar = get_tree().root.find_child(
+		"HealthBar",
+		true,
+		false
+	) as ProgressBar
 
 	if health_bar:
 		health_bar.size = Vector2(250, 36)
@@ -100,6 +118,7 @@ func _ready() -> void:
 		background_style.bg_color = Color.BLACK
 		background_style.border_color = Color.BLACK
 		background_style.set_border_width_all(2)
+
 		health_bar.add_theme_stylebox_override(
 			"background",
 			background_style
@@ -117,16 +136,49 @@ func _physics_process(delta: float) -> void:
 		and movement_speed_multiplier < 1.0
 	)
 
+	# =========================================================
+	# GRAVITY
+	# =========================================================
+
 	if not is_on_floor():
 		if is_level8_water:
 			velocity.y += gravity * 1.333333 * delta
 		else:
 			velocity.y += gravity * movement_speed_multiplier * delta
 
+	# =========================================================
+	# KNOCKBACK / STUN
+	# =========================================================
+
+	if knockback_timer > 0.0:
+		knockback_timer -= delta
+
+		velocity.x = move_toward(
+			velocity.x,
+			0.0,
+			knockback_friction * delta
+		)
+
+		move_and_slide()
+
+		if knockback_timer <= 0.0:
+			knockback_timer = 0.0
+			knockback_velocity = Vector2.ZERO
+
+		return
+
+	# =========================================================
+	# SHIELD PICKUP
+	# =========================================================
+
 	if is_picking_up_shield:
 		velocity.x = 0.0
 		move_and_slide()
 		return
+
+	# =========================================================
+	# MOVEMENT INPUT
+	# =========================================================
 
 	var direction := Input.get_axis("move_left", "move_right")
 
@@ -136,6 +188,10 @@ func _physics_process(delta: float) -> void:
 		* movement_speed_multiplier
 		* portal_speed_multiplier
 	)
+
+	# =========================================================
+	# JUMP
+	# =========================================================
 
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		var current_jump_velocity := jump_velocity
@@ -155,19 +211,39 @@ func _physics_process(delta: float) -> void:
 
 		_play_audio("res://sfx/jump.wav")
 
+	# =========================================================
+	# FACING
+	# =========================================================
+
 	if direction != 0:
 		facing_direction = int(sign(direction))
 		anim.flip_h = direction < 0
 		attack_area.position.x = attack_offset_x * facing_direction
 
+	# =========================================================
+	# ATTACK
+	# =========================================================
+
 	if Input.is_action_just_pressed("attack"):
 		attack()
+
+	# =========================================================
+	# SHIELD THROW
+	# =========================================================
 
 	if Input.is_action_just_pressed("shield_throw"):
 		throw_shield()
 
+	# =========================================================
+	# MOVEMENT ANIMATION
+	# =========================================================
+
 	if not is_attacking and not is_throwing_shield:
 		update_movement_animation(direction)
+
+	# =========================================================
+	# FOOTSTEPS
+	# =========================================================
 
 	if (
 		is_on_floor()
@@ -187,10 +263,14 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
+# =============================================================
+# MOVEMENT ANIMATION
+# =============================================================
+
 func update_movement_animation(direction: float) -> void:
 	if has_shield and shield_in_hand:
 		if not is_on_floor():
-			anim.play("shield_idle")
+			anim.play("shield_jump")
 		elif direction != 0:
 			anim.play("shield_run")
 		else:
@@ -203,6 +283,10 @@ func update_movement_animation(direction: float) -> void:
 		else:
 			anim.play("idle")
 
+
+# =============================================================
+# SHIELD PICKUP
+# =============================================================
 
 func collect_shield() -> void:
 	if has_shield or is_dead or is_picking_up_shield:
@@ -222,8 +306,15 @@ func collect_shield() -> void:
 		return
 
 	is_picking_up_shield = false
-	anim.play("shield_idle")
 
+	update_movement_animation(
+		Input.get_axis("move_left", "move_right")
+	)
+
+
+# =============================================================
+# THROW SHIELD
+# =============================================================
 
 func throw_shield() -> void:
 	if (
@@ -272,10 +363,15 @@ func throw_shield() -> void:
 		return
 
 	is_throwing_shield = false
+
 	update_movement_animation(
 		Input.get_axis("move_left", "move_right")
 	)
 
+
+# =============================================================
+# SHIELD RETURNED
+# =============================================================
 
 func on_shield_returned() -> void:
 	active_shield_projectile = null
@@ -294,8 +390,15 @@ func on_shield_returned() -> void:
 
 	shield_in_hand = true
 	is_picking_up_shield = false
-	anim.play("shield_idle")
 
+	update_movement_animation(
+		Input.get_axis("move_left", "move_right")
+	)
+
+
+# =============================================================
+# PLAYER ATTACK
+# =============================================================
 
 func attack() -> void:
 	if (
@@ -337,9 +440,10 @@ func attack() -> void:
 			and enemy_node.is_in_group("enemies")
 			and enemy_node.has_method("take_damage")
 		):
-			var final_damage: int = roundi(
+			var final_damage: int = ceili(
 				attack_damage * final_boss_damage_multiplier
 			)
+
 			enemy_node.take_damage(final_damage)
 			has_hit_enemy = true
 
@@ -358,10 +462,35 @@ func attack() -> void:
 		return
 
 	is_attacking = false
+
 	update_movement_animation(
 		Input.get_axis("move_left", "move_right")
 	)
 
+
+# =============================================================
+# KNOCKBACK
+# =============================================================
+
+func apply_knockback(force: Vector2) -> void:
+	if is_dead:
+		return
+
+	is_attacking = false
+	is_throwing_shield = false
+	is_picking_up_shield = false
+
+	knockback_velocity = force
+	knockback_timer = knockback_duration
+	velocity = force
+
+	if anim.sprite_frames.has_animation("hurt"):
+		anim.play("hurt")
+
+
+# =============================================================
+# AUDIO
+# =============================================================
 
 func _play_audio(
 	path: String,
@@ -369,13 +498,17 @@ func _play_audio(
 	start_offset: float = 0.0
 ) -> void:
 	if not ResourceLoader.exists(path):
-		print("EROARE SFX: Nu s-a gasit fisierul audio la calea: ", path)
+		print(
+			"EROARE SFX: Nu s-a gasit fisierul audio la calea: ",
+			path
+		)
 		return
 
 	var stream = load(path)
 
 	if stream:
 		var asp := AudioStreamPlayer.new()
+
 		asp.stream = stream
 		asp.volume_db = volume_db
 		asp.bus = "Master"
@@ -385,6 +518,10 @@ func _play_audio(
 		asp.play(start_offset)
 		asp.finished.connect(asp.queue_free)
 
+
+# =============================================================
+# TAKE DAMAGE
+# =============================================================
 
 func take_damage(
 	amount: int,
@@ -396,30 +533,49 @@ func take_damage(
 	var remaining_damage: int = amount
 
 	if final_boss_shield > 0:
-		var absorbed_damage: int = min(final_boss_shield, remaining_damage)
+		var absorbed_damage: int = min(
+			final_boss_shield,
+			remaining_damage
+		)
+
 		final_boss_shield -= absorbed_damage
 		remaining_damage -= absorbed_damage
 
 	if remaining_damage > 0:
 		health -= remaining_damage
-		health = clamp(health, 0, max_health)
+		health = clamp(
+			health,
+			0,
+			max_health
+		)
 
-	ScreenShake.shake(3.0, 15.0)
+	ScreenShake.shake(
+		3.0,
+		15.0
+	)
 
-	_play_audio("res://sfx/hurt-sound.mp3")
+	_play_audio(
+		"res://sfx/hurt-sound.mp3"
+	)
+
 	update_health_bar(true)
 
 	if health <= 0:
 		die(source)
 
 
+# =============================================================
+# FINAL BOSS BUFFS
+# =============================================================
+
 func apply_final_boss_buffs() -> void:
 	if is_dead:
 		return
 
 	health = max_health
-	final_boss_shield = max_health * 2  # 400 Scut
-	final_boss_damage_multiplier = 1.5  # +50% damage
+	final_boss_shield = int(round(max_health * 3.885))
+	final_boss_damage_multiplier = 2
+
 	update_health_bar(false)
 
 	print(
@@ -432,6 +588,10 @@ func apply_final_boss_buffs() -> void:
 	)
 
 
+# =============================================================
+# UPDATE HEALTH BAR
+# =============================================================
+
 func update_health_bar(animate_text: bool = false) -> void:
 	if health_bar:
 		health_bar.max_value = max_health
@@ -441,12 +601,26 @@ func update_health_bar(animate_text: bool = false) -> void:
 		hp_fill.bg_color = Color.RED
 		hp_fill.border_color = Color.BLACK
 		hp_fill.set_border_width_all(2)
-		health_bar.add_theme_stylebox_override("fill", hp_fill)
+
+		health_bar.add_theme_stylebox_override(
+			"fill",
+			hp_fill
+		)
 
 		var parent_node := health_bar.get_parent()
+
 		if parent_node:
-			var shield_bar := parent_node.find_child("ShieldBarUI", false, false) as ProgressBar
-			var shield_label := parent_node.find_child("ShieldLabelUI", false, false) as Label
+			var shield_bar := parent_node.find_child(
+				"ShieldBarUI",
+				false,
+				false
+			) as ProgressBar
+
+			var shield_label := parent_node.find_child(
+				"ShieldLabelUI",
+				false,
+				false
+			) as Label
 
 			if final_boss_shield > 0:
 				if shield_bar == null:
@@ -459,9 +633,15 @@ func update_health_bar(animate_text: bool = false) -> void:
 				shield_bar.max_value = max_health * 2
 				shield_bar.value = final_boss_shield
 
-				shield_bar.size = Vector2(250, health_bar.size.y)
+				shield_bar.size = Vector2(
+					250,
+					health_bar.size.y
+				)
+
 				shield_bar.position = Vector2(
-					health_bar.position.x + health_bar.size.x + 4.0,
+					health_bar.position.x
+					+ health_bar.size.x
+					+ 4.0,
 					health_bar.position.y
 				)
 
@@ -469,13 +649,21 @@ func update_health_bar(animate_text: bool = false) -> void:
 				shield_fill.bg_color = Color("#00d2ff")
 				shield_fill.border_color = Color.BLACK
 				shield_fill.set_border_width_all(2)
-				shield_bar.add_theme_stylebox_override("fill", shield_fill)
+
+				shield_bar.add_theme_stylebox_override(
+					"fill",
+					shield_fill
+				)
 
 				var shield_bg := StyleBoxFlat.new()
 				shield_bg.bg_color = Color.BLACK
 				shield_bg.border_color = Color.BLACK
 				shield_bg.set_border_width_all(2)
-				shield_bar.add_theme_stylebox_override("background", shield_bg)
+
+				shield_bar.add_theme_stylebox_override(
+					"background",
+					shield_bg
+				)
 
 				if shield_label == null:
 					shield_label = Label.new()
@@ -484,19 +672,36 @@ func update_health_bar(animate_text: bool = false) -> void:
 
 				shield_label.visible = true
 				shield_label.text = "+%d SHIELD" % final_boss_shield
-				shield_label.add_theme_color_override("font_color", Color.YELLOW)
-				shield_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-				shield_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+
+				shield_label.add_theme_color_override(
+					"font_color",
+					Color.YELLOW
+				)
+
+				shield_label.horizontal_alignment = (
+					HORIZONTAL_ALIGNMENT_CENTER
+				)
+
+				shield_label.vertical_alignment = (
+					VERTICAL_ALIGNMENT_CENTER
+				)
+
 				shield_label.size = shield_bar.size
 				shield_label.position = shield_bar.position
+
 			else:
 				if shield_bar:
 					shield_bar.visible = false
+
 				if shield_label:
 					shield_label.visible = false
 
 	update_hp_ui(animate_text)
 
+
+# =============================================================
+# UPDATE HP TEXT
+# =============================================================
 
 func update_hp_ui(animate: bool = false) -> void:
 	var hp_label: Label = get_tree().root.find_child(
@@ -510,7 +715,13 @@ func update_hp_ui(animate: bool = false) -> void:
 
 		if animate:
 			var tween := create_tween()
-			hp_label.modulate = Color(1.0, 0.25, 0.25)
+
+			hp_label.modulate = Color(
+				1.0,
+				0.25,
+				0.25
+			)
+
 			tween.tween_property(
 				hp_label,
 				"modulate",
@@ -519,22 +730,32 @@ func update_hp_ui(animate: bool = false) -> void:
 			)
 
 
+# =============================================================
+# PLAYER DEATH
+# =============================================================
+
 func die(source: String = "enemy") -> void:
 	if is_dead:
 		return
 
 	is_dead = true
+
 	set_physics_process(false)
 
 	Engine.time_scale = 0.2
-	ScreenShake.shake(28.0, 2.5)
+
+	ScreenShake.shake(
+		28.0,
+		2.5
+	)
 
 	var cam := get_viewport().get_camera_2d()
 
 	if cam:
-		var tween := create_tween() \
-			.set_trans(Tween.TRANS_QUAD) \
-			.set_ease(Tween.EASE_OUT)
+		var tween := create_tween()
+
+		tween.set_trans(Tween.TRANS_QUAD)
+		tween.set_ease(Tween.EASE_OUT)
 
 		tween.tween_property(
 			cam,
@@ -543,18 +764,34 @@ func die(source: String = "enemy") -> void:
 			0.3
 		)
 
-	anim.modulate = Color(2.5, 0.2, 0.2)
+	anim.modulate = Color(
+		2.5,
+		0.2,
+		0.2
+	)
 
 	var death_sound := "res://sfx/moarte_enemy.wav"
 	var sound_volume: float = 12.0
 
+	# =========================================================
+	# SUNET SPECIAL FINAL BOSS - DOAR LEVEL 10
+	# =========================================================
+
 	if (
+		GameState.current_level == 10
+		and source == "final_boss"
+	):
+		death_sound = "res://sfx/whenTheBossKillsYou.mp3"
+		sound_volume = 12.0
+
+	elif (
 		source == "lava"
 		or source == "spike"
 		or source == "hazard"
 	):
 		death_sound = "res://sfx/moarte_oricealtcv.wav"
 		sound_volume = 20.0
+
 	else:
 		sound_volume = 12.0
 
@@ -563,9 +800,63 @@ func die(source: String = "enemy") -> void:
 		sound_volume
 	)
 
-	await get_tree().create_timer(0.25).timeout
+	# Pornim prima secvență de moarte.
+	death_sequence_id += 1
+	_run_death_sequence(death_sequence_id)
+
+
+# =============================================================
+# DEATH SEQUENCE
+# =============================================================
+
+func _run_death_sequence(sequence_id: int) -> void:
+	# process_always = false:
+	# timerul se OPREȘTE atunci când jocul este paused.
+	await get_tree().create_timer(
+		0.25,
+		false
+	).timeout
+
+	if not is_dead:
+		return
+
+	if sequence_id != death_sequence_id:
+		return
+
 	_reload_level()
 
+
+# =============================================================
+# RESUME DEATH AFTER PAUSE
+# =============================================================
+
+func resume_death_after_pause() -> void:
+	if not is_dead:
+		return
+
+	# Invalidăm secvența veche.
+	death_sequence_id += 1
+
+	# Refacem efectul vizual de moarte.
+	anim.modulate = Color(
+		2.5,
+		0.2,
+		0.2
+	)
+
+	# Repornim screen shake.
+	ScreenShake.shake(
+		28.0,
+		2.5
+	)
+
+	# Pornim o secvență nouă.
+	_run_death_sequence(death_sequence_id)
+
+
+# =============================================================
+# RELOAD LEVEL
+# =============================================================
 
 func _reload_level() -> void:
 	Engine.time_scale = 1.0
@@ -579,17 +870,30 @@ func _reload_level() -> void:
 	get_tree().reload_current_scene()
 
 
+# =============================================================
+# WATER SLOW
+# =============================================================
+
 func set_water_slow(multiplier: float) -> void:
 	if multiplier < 1.0 and movement_speed_multiplier == 1.0:
 		velocity.x *= multiplier
-		velocity.y *= multiplier
+
+	velocity.y *= multiplier
 
 	movement_speed_multiplier = multiplier
 
 
+# =============================================================
+# LEVEL 8 WATER JUMP
+# =============================================================
+
 func set_level8_water_jump(enabled: bool) -> void:
 	level8_water_jump = enabled
 
+
+# =============================================================
+# PORTAL BOOST
+# =============================================================
 
 func start_portal_boost(duration: float = 5.0) -> void:
 	if portal_boost_active or is_dead:
@@ -606,6 +910,10 @@ func start_portal_boost(duration: float = 5.0) -> void:
 	portal_boost_active = false
 
 
+# =============================================================
+# FOOTSTEP
+# =============================================================
+
 func _play_footstep() -> void:
 	if footstep_sounds.is_empty():
 		return
@@ -614,6 +922,7 @@ func _play_footstep() -> void:
 
 	if random_stream:
 		var asp := AudioStreamPlayer.new()
+
 		asp.stream = random_stream
 		asp.volume_db = randf_range(2.0, 5.0)
 		asp.pitch_scale = randf_range(0.93, 1.07)

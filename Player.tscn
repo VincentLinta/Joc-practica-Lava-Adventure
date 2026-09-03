@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://yjy08v1mwssj" path="res://assets/player/Captain_America_dreapta.png" id="5_wi0c6"]
 [ext_resource type="Texture2D" uid="uid://csbuothyvxm2d" path="res://assets/player/shield/Captain_America_scut_idle.png" id="6_5ncpa"]
 [ext_resource type="Texture2D" uid="uid://dwld2jd75k1xo" path="res://assets/player/shield/Captain_America_scut_prinde.png" id="6_tdg3f"]
+[ext_resource type="Texture2D" uid="uid://bnlseuofffutw" path="res://assets/player/shield/Captain_America_sare_scut.png" id="7_hp6x6"]
 [ext_resource type="Texture2D" uid="uid://rbfsyphc8332" path="res://assets/player/shield/Captain_America_scut_merge.png" id="8_wi0c6"]
 [ext_resource type="Texture2D" uid="uid://bj7vlbi8w4yjc" path="res://assets/player/shield/Captain_America_scut_arunca.png" id="9_wi0c6"]
 
@@ -88,6 +89,22 @@ region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d6rpx"]
 atlas = ExtResource("6_5ncpa")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h84ma"]
+atlas = ExtResource("7_hp6x6")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_47wu6"]
+atlas = ExtResource("7_hp6x6")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2n1s8"]
+atlas = ExtResource("7_hp6x6")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3vjad"]
+atlas = ExtResource("7_hp6x6")
 region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dtqjt"]
@@ -227,6 +244,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_h84ma")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_47wu6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2n1s8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3vjad")
+}],
+"loop": true,
+"name": &"shield_jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_dtqjt")
 }, {
 "duration": 1.0,
@@ -291,7 +325,7 @@ script = ExtResource("1_cxr5p")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1345067313]
 sprite_frames = SubResource("SpriteFrames_u2ylw")
-animation = &"idle"
+animation = &"shield_jump"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1098264043]
 position = Vector2(0, 10)

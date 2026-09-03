@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://lnh4eg1hgpuw"]
+
+[ext_resource type="Script" uid="uid://betalabddr5il" path="res://demon_blood_ball.gd" id="1_0wbv7"]
+[ext_resource type="Texture2D" uid="uid://blk8ryos60tqc" path="res://assets/boss_final/Demon_BloodBall.png" id="2_0wbv7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n1nml"]
+atlas = ExtResource("2_0wbv7")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6pnv4"]
+atlas = ExtResource("2_0wbv7")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_otm76"]
+atlas = ExtResource("2_0wbv7")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4d03o"]
+atlas = ExtResource("2_0wbv7")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4d03o"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n1nml")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6pnv4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_otm76")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4d03o")
+}],
+"loop": true,
+"name": &"demon_blood_ball",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j4l0p"]
+radius = 12.165526
+
+[node name="DemonBloodBall" type="Area2D" unique_id=1014215169]
+script = ExtResource("1_0wbv7")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1471710782]
+sprite_frames = SubResource("SpriteFrames_4d03o")
+animation = &"demon_blood_ball"
+frame_progress = 0.5287327
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1222690018]
+rotation = -1.5542612
+shape = SubResource("CircleShape2D_j4l0p")
