@@ -52,7 +52,7 @@ Lava Adventure is a 2D action-platformer built with Godot Engine 4.6.2. The play
 2. Use **Run Project** to start from the main scene, or run an individual scene to test it in isolation.
 
 **Final build:**
-A final build for Windows was generated and tested across all 10 levels directly from the exported build (not only from the editor), including verification of the in-build settings window (resolution, fullscreen/windowed/borderless). Exact build/export configuration details beyond this are not included here, as they were not independently verifiable in this conversation.
+A final build for Windows was generated and tested across all 10 levels directly from the exported build (not only from the editor), including verification of the in-build settings window (resolution, fullscreen/windowed/borderless).
 
 ## Project Structure
 
@@ -207,7 +207,7 @@ Tests use mock objects (e.g. mock player and boss objects) instead of loading fu
 
 ## Build
 
-A final build for Windows was generated using Godot's export templates and tested across all 10 levels directly from the exported build. Beyond this, detailed build/export configuration (export presets, target platforms other than Windows, packaging steps) is not documented here, as it could not be verified in this conversation.
+A final build for Windows was generated using Godot's export templates and tested across all 10 levels directly from the exported build.
 
 ## Project Status
 
